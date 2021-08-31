@@ -230,13 +230,13 @@ impl Context {
 
   pub fn save(&mut self) {
     self.states.push(self.state.clone());
+    self.surface.save();
   }
 
   pub fn restore(&mut self) {
     if let Some(s) = self.states.pop() {
+      self.surface.restore();
       self.state = s;
-      self.surface.reset();
-      self.surface.save();
       self.surface.canvas.set_transform(&self.state.transform);
     }
   }
@@ -262,27 +262,23 @@ impl Context {
   }
 
   pub fn translate(&mut self, x: f32, y: f32) {
-    let ts = &mut self.state.transform;
-    ts.pre_translate(x, y);
-    self.surface.canvas.set_transform(&ts);
+    self.surface.canvas.translate(x, y);
+    self.state.transform = self.surface.get_transform_matrix();
   }
 
   pub fn transform(&mut self, ts: Matrix) {
-    let current_ts = &mut self.state.transform;
-    current_ts.pre_concat(&ts);
-    self.surface.canvas.set_transform(&current_ts);
+    self.surface.canvas.concat(&ts);
+    self.state.transform = self.surface.get_transform_matrix();
   }
 
   pub fn rotate(&mut self, angle: f32) {
-    let ts = &mut self.state.transform;
-    ts.pre_rotate(angle as f32 / PI * 180f32);
-    self.surface.set_transform(ts);
+    self.surface.rotate(angle as f32 / PI * 180f32);
+    self.state.transform = self.surface.get_transform_matrix();
   }
 
   pub fn scale(&mut self, x: f32, y: f32) {
-    let ts = &mut self.state.transform;
-    ts.pre_scale(x, y);
-    self.surface.canvas.set_transform(ts);
+    self.surface.canvas.scale(x, y);
+    self.state.transform = self.surface.get_transform_matrix();
   }
 
   pub fn set_transform(&mut self, ts: Matrix) {

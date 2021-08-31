@@ -1069,6 +1069,13 @@ extern "C"
     return reinterpret_cast<skiac_matrix *>(new SkMatrix(*MATRIX_CAST));
   }
 
+  skiac_matrix *skiac_matrix_concat(skiac_matrix *c_matrix, skiac_matrix *other)
+  {
+    auto m = SkMatrix::Concat(*MATRIX_CAST, *reinterpret_cast<SkMatrix *>(other));
+    auto r = new SkMatrix(m);
+    return reinterpret_cast<skiac_matrix *>(r);
+  }
+
   void skiac_matrix_pre_translate(skiac_matrix *c_matrix, float dx, float dy)
   {
     MATRIX_CAST->preTranslate(dx, dy);

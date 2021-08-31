@@ -616,6 +616,11 @@ mod ffi {
 
     pub fn skiac_matrix_clone(matrix: *mut skiac_matrix) -> *mut skiac_matrix;
 
+    pub fn skiac_matrix_concat(
+      ts: *mut skiac_matrix,
+      other: *mut skiac_matrix,
+    ) -> *mut skiac_matrix;
+
     pub fn skiac_matrix_pre_concat_transform(matrix: *mut skiac_matrix, ts: skiac_transform);
 
     pub fn skiac_matrix_pre_translate(matrix: *mut skiac_matrix, dx: f32, dy: f32);
@@ -2671,6 +2676,10 @@ impl Matrix {
 
   pub fn pre_translate(&mut self, dx: f32, dy: f32) {
     unsafe { ffi::skiac_matrix_pre_translate(self.0, dx, dy) };
+  }
+
+  pub fn concat(&self, other: &Matrix) -> Self {
+    Self(unsafe { ffi::skiac_matrix_concat(self.0, other.0) })
   }
 
   pub fn pre_concat(&mut self, other: &Matrix) {

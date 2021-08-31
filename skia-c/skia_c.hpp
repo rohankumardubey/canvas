@@ -382,6 +382,7 @@ extern "C"
   skiac_matrix *skiac_matrix_from_ts(const skiac_transform *c_ts);
   skiac_matrix *skiac_matrix_create_rotated(float rotation, float x, float y);
   skiac_matrix *skiac_matrix_clone(skiac_matrix *c_matrix);
+  skiac_matrix *skiac_matrix_concat(skiac_matrix *c_matrix, skiac_matrix *other);
   void skiac_matrix_pre_translate(skiac_matrix *c_matrix, float dx, float dy);
   void skiac_matrix_pre_concat(skiac_matrix *c_matrix, skiac_matrix *other);
   void skiac_matrix_pre_scale(skiac_matrix *c_matrix, float sx, float sy);
